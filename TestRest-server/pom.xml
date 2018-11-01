@@ -18,6 +18,13 @@
     <packaging>war</packaging>
 
     <dependencies>
+        <!--<dependency>-->
+            <!--<groupId>org.fusesource.restygwt</groupId>-->
+            <!--<artifactId>restygwt</artifactId>-->
+            <!--<version>2.2.0</version>-->
+        <!--</dependency>-->
+
+
         <dependency>
             <groupId>${project.groupId}</groupId>
             <artifactId>TestRest-shared</artifactId>
