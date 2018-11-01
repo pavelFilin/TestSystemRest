@@ -1,25 +1,20 @@
-package ru.filin.testSystem.domain;
+package ru.filin.DTO;
 
-import ru.filin.DTO.UserDTO;
-
-public class User {
+public class UserDTO {
     private long id;
     private String nickname;
     private String password;
     private String name;
 
-    public User() {
+    public UserDTO() {
     }
 
-    public User(String nickname, String password, String name) {
+    public UserDTO(String nickname, String password, String name) {
         this.nickname = nickname;
         this.password = password;
         this.name = name;
     }
 
-    public UserDTO getUserDTO( ) {
-        return new UserDTO(nickname, password, name);
-    }
 
     public long getId() {
         return id;
