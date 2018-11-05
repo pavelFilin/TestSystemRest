@@ -8,7 +8,7 @@ import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import java.util.List;
 
-@Path("/rest/users")
+@Path("rest/users")
 public interface UserInfo extends RestService {
     @GET
     public void getAllUsers(MethodCallback<List<UserDTO>> users);

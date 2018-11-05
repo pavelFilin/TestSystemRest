@@ -45,6 +45,7 @@ public class App implements EntryPoint {
     private final UserInfo userInfo = GWT.create(UserInfo.class);
     private final List<UserDTO> users = new ArrayList<>();
     final Label fail = new Label();
+    final Label usersTextBox = new Label();
 
     /**
      * This is the entry point method.
@@ -53,8 +54,7 @@ public class App implements EntryPoint {
         final Button sendButton = new Button("Send");
         final Button getUserInformationButton = new Button("get info");
         final TextBox nameField = new TextBox();
-        final TextBox usersTesxBox = new TextBox();
-        nameField.setText("GWT User");
+        nameField.setText("GWT User app!!! Compile");
         final Label errorLabel = new Label();
 
         // We can add style names to widgets
@@ -69,8 +69,9 @@ public class App implements EntryPoint {
 
         getUsers();
         RootPanel.get("userInfoContainer").add(getUserInformationButton);
-        users.forEach(userDTO -> usersTesxBox.setText(userDTO.getName() + " "));
-        RootPanel.get("userInfoContainer").add(usersTesxBox);
+//        users.forEach(userDTO -> usersTextBox.setText(usersTextBox.getText() + userDTO.getName() + " "));
+        fail.setText(Integer.toString(users.size()));
+        RootPanel.get("userInfoContainer").add(usersTextBox);
         RootPanel.get("userInfoContainer").add(fail);
 
 
@@ -189,7 +190,8 @@ public class App implements EntryPoint {
             @Override
             public void onSuccess(Method method, List<UserDTO> userDTOS) {
                 userDTOS.forEach(userDTO -> users.add(userDTO));
-                fail.setText("success");
+                users.forEach(userDTO -> usersTextBox.setText(usersTextBox.getText() + userDTO.getName() + " "));
+                fail.setText("success " + userDTOS.size());
             }
         });
     }
