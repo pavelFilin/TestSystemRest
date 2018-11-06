@@ -3,6 +3,7 @@ package ru.filin.testSystem.configurations;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.JpaVendorAdapter;
@@ -18,13 +19,19 @@ import java.util.Properties;
 
 @EnableTransactionManagement
 @Configuration
+@EnableJpaRepositories(basePackages = "ru.filin.testSystem.repositories")
 public class PersistenceContext {
+    @Bean
+    public String myBean() {
+        return "223";
+    }
+
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         LocalContainerEntityManagerFactoryBean em
                 = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan(new String[]{"org.baeldung.persistence.model"});
+        em.setPackagesToScan(new String[]{"ru.filin.testSystem.domain"});
 
         JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);
@@ -59,7 +66,7 @@ public class PersistenceContext {
 
     Properties additionalProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.hbm2ddl.auto", "create");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
         properties.setProperty(
                 "hibernate.dialect", "org.hibernate.dialect.MySQL5Dialect");
         properties.setProperty("spring.jpa.show-sql", "true");

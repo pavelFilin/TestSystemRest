@@ -1,18 +1,26 @@
 package ru.filin.testSystem.domain;
 
 
+import org.springframework.stereotype.Repository;
+import ru.filin.testSystem.repositories.QuizRepository;
 
 import javax.persistence.*;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity
-public class Quiz {
+@Table(name = "quiz")
+public class Quiz implements Serializable {
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     public long id;
 
-    @Column
+    @Column(name = "title", length = 50)
     String title;
+
+    public Quiz() {
+    }
 
     public long getId() {
         return id;

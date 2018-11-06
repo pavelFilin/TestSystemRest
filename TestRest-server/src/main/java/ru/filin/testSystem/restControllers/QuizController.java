@@ -6,14 +6,16 @@ import org.springframework.web.bind.annotation.RestController;
 import ru.filin.testSystem.domain.Quiz;
 import ru.filin.testSystem.repositories.QuizRepository;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @RestController
 public class QuizController {
-//    @Autowired
-//    QuizRepository quizRepository;
+    @Autowired
+    QuizRepository quizRepository;
 
     @GetMapping("/quiz")
-    public Quiz getQuiz() {
-//        return quizRepository.findByTitle("1");
-        return new Quiz();
+    public List<Quiz> getQuiz() {
+        return  quizRepository.findAll();
     }
 }
