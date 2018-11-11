@@ -30,9 +30,9 @@ public class UserRestController {
         user.setPassword("password");
         user.setRoles(new HashSet<>());
         user.getRoles().add(Role.Admin);
-        List<UserDTO> users = new ArrayList<>();
+//        List<UserDTO> users = new ArrayList<>();
 //        userRepository.save(user);
-        users.add(user.getUserDTO());
+//        users.add(user.getUserDTO());
         return userRepository.findAll();
     }
 }
