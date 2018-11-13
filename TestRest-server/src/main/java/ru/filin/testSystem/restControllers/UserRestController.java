@@ -22,17 +22,17 @@ public class UserRestController {
     private UserRepository userRepository;
 
     @GetMapping("users")
-    public List<User> getUser() {
-        User user = new User();
-        user.setEmail("test@mail.ru");
-        user.setName("name");
-        user.setNickname("nickname");
-        user.setPassword("password");
-        user.setRoles(new HashSet<>());
-        user.getRoles().add(Role.Admin);
-//        List<UserDTO> users = new ArrayList<>();
-//        userRepository.save(user);
-//        users.add(user.getUserDTO());
-        return userRepository.findAll();
+    public List<UserDTO> getUser() {
+//        User user = new User();
+//        user.setEmail("test@mail.ru");
+//        user.setName("name");
+//        user.setNickname("nickname");
+//        user.setPassword("password");
+//        user.setRoles(new HashSet<>());
+//        user.getRoles().add(Role.ADMIN);
+        List<User> all = userRepository.findAll();
+        List<UserDTO> allUsers = new ArrayList<>();
+        all.stream().forEach(user -> allUsers.add(new UserDTO(user.getNickname(), user.getPassword(), user.getName())));
+        return allUsers;
     }
 }

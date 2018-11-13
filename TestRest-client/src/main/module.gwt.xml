@@ -3,11 +3,14 @@
     <inherits name="com.google.gwt.user.User"/>
     <inherits name="com.google.gwt.user.theme.clean.Clean"/>
 
+
+    <inherits name="org.fusesource.restygwt.RestyGWT"/>
+    <!--<inherits name="com.gwt.ss.GwtSecurity"/>-->
+
     <source path=""/>
 
     <entry-point class="ru.filin.App"/>
 
-    <inherits name="org.fusesource.restygwt.RestyGWT"/>
 
 
     <!-- Only support recent browsers -->

@@ -3,8 +3,8 @@ package ru.filin.testSystem.domain;
 import org.springframework.security.core.GrantedAuthority;
 
 public enum  Role implements GrantedAuthority {
-    User,
-    Admin;
+    USER,
+    ADMIN;
 
     @Override
     public String getAuthority() {
