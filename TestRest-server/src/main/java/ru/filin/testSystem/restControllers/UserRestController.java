@@ -1,38 +1,28 @@
 package ru.filin.testSystem.restControllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 import ru.filin.DTO.UserDTO;
-import ru.filin.testSystem.domain.Role;
 import ru.filin.testSystem.domain.User;
 import ru.filin.testSystem.repositories.UserRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 public class UserRestController {
-
-    @Autowired
-    String myBean;
 
     @Autowired
     private UserRepository userRepository;
 
     @GetMapping("users")
     public List<UserDTO> getUser() {
-//        User user = new User();
-//        user.setEmail("test@mail.ru");
-//        user.setName("name");
-//        user.setNickname("nickname");
-//        user.setPassword("password");
-//        user.setRoles(new HashSet<>());
-//        user.getRoles().add(Role.ADMIN);
-        List<User> all = userRepository.findAll();
-        List<UserDTO> allUsers = new ArrayList<>();
-        all.stream().forEach(user -> allUsers.add(new UserDTO(user.getNickname(), user.getPassword(), user.getName())));
-        return allUsers;
+        List<User> users = userRepository.findAll();
+//        List<UserDTO> allUsers = new ArrayList<>();
+//        all.stream().forEach(user -> allUsers.add(new UserDTO(user.getNickname(), user.getPassword(), user.getName())));
+        return users.stream()
+                .map(user -> new UserDTO(user.getNickname(), user.getPassword(), user.getName()))
+                .collect(Collectors.toList());
     }
 }

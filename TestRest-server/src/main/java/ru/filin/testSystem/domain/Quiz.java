@@ -1,23 +1,34 @@
 package ru.filin.testSystem.domain;
 
 
-import org.springframework.stereotype.Repository;
-import ru.filin.testSystem.repositories.QuizRepository;
-
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "quiz")
 public class Quiz implements Serializable {
 
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    public long id;
+    private long id;
 
     @Column(name = "title", length = 50)
-    String title;
+    private String title;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
+            targetEntity = QuestionStandard.class, mappedBy = "quiz")
+    private Set<QuestionStandard> questionStandard = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
+            targetEntity = QuestionFreeText.class, mappedBy = "quiz")
+    private Set<QuestionFreeText> questionFreeTexts = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
+            targetEntity = QuestionGroup.class, mappedBy = "quiz")
+    private Set<QuestionGroup> questionGroups = new HashSet<>();
+
 
     public Quiz() {
     }
@@ -36,5 +47,13 @@ public class Quiz implements Serializable {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Set<QuestionStandard> getQuestionStandard() {
+        return questionStandard;
+    }
+
+    public void setQuestionStandard(Set<QuestionStandard> questionStandard) {
+        this.questionStandard = questionStandard;
     }
 }
