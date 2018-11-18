@@ -28,7 +28,7 @@ public class RegistrationController {
         user.setName(name);
         user.setNickname(nickname);
         user.setPassword(password);
-        if (userService.addUser(user)) {
+            if (userService.addUser(user)) {
             return "login";
         } else {
             model.addAttribute("message", "whoops! your date is bad");
