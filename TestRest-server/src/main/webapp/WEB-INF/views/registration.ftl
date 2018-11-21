@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
+    <#--<meta name="_csrf" content="${_csrf.token}"/>-->
+    <#--<meta name="_csrf_header" content="${_csrf.headerName}"/>-->
     <meta charset="UTF-8">
-    <title>Fish Shop</title>
+    <title>Test System</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -63,7 +63,7 @@
                     </#if>
                 </div>
                 <div class="form-group">
-                    <input type="hidden" name="_csrf" value="${_csrf.token}"/>
+                    <#--<input type="hidden" name="_csrf" value="${_csrf.token}"/>-->
                     <button type="submit" class="btn btn-primary btn-block">Sing up</button>
                 </div>
                 <p class="text-center"> <a href="/app/rest/login">Log in</a></p>

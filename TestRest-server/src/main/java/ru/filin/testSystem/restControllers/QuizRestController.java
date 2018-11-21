@@ -6,6 +6,7 @@ import ru.filin.testSystem.Services.QuizService;
 import ru.filin.testSystem.domain.Quiz;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/quiz")
@@ -23,10 +24,10 @@ public class QuizRestController {
         return quizService.findByID(id);
     }
 
-    @PostMapping
-    public void addQuiz(@RequestParam String title) {
+    @RequestMapping(method = RequestMethod.POST, produces = "application/json")
+    public void addQuiz(@RequestBody Map<String, String> title) {
         Quiz quiz = new Quiz();
-        quiz.setTitle(title);
+        quiz.setTitle(title.get("title"));
         quizService.add(quiz);
     }
 

@@ -31,8 +31,6 @@ import java.util.List;
  */
 public class App implements EntryPoint {
 
-    private final GreetingServiceAsync greetingService = GWT
-            .create(GreetingService.class);
 
     private final QuizService quizService = GWT.create(QuizService.class);
 
@@ -53,7 +51,7 @@ public class App implements EntryPoint {
             public void onSuccess(Method method, List<QuizDTO> response) {
                 verticalPanel.add(new Label("Current count of quizzes:" + response.size()));
                 for (QuizDTO quizDTO: response) {
-                    verticalPanel.add(new Label("Title " + quizDTO.getTitle()));
+                    verticalPanel.add(new Label("Title1 " + quizDTO.getTitle()));
                 }
             }
         });
