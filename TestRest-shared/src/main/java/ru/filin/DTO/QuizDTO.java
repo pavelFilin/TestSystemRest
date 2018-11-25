@@ -31,6 +31,24 @@ public class QuizDTO {
         this.title = title;
     }
 
+    public int getCountOfQuestion() {
+        int count = 0;
+        if (questionStandardDTO != null) {
+            count+= questionStandardDTO.size();
+        }
+
+        if (questionFreeTextDTOS != null) {
+            count+=questionFreeTextDTOS.size();
+        }
+
+        if (questionGroupDTOS != null) {
+            count+=questionGroupDTOS.size();
+        }
+
+
+        return count;
+    }
+
     public Set<QuestionStandardDTO> getQuestionStandardDTO() {
         return questionStandardDTO;
     }
@@ -54,4 +72,5 @@ public class QuizDTO {
     public void setQuestionGroupDTOS(Set<QuestionGroupDTO> questionGroupDTOS) {
         this.questionGroupDTOS = questionGroupDTOS;
     }
+
 }

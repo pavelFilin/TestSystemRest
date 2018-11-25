@@ -1,14 +1,14 @@
 package ru.filin;
 
-import org.fusesource.restygwt.client.MethodCallback;
-import org.fusesource.restygwt.client.RestService;
-import ru.filin.DTO.QuizDTO;
+    import org.fusesource.restygwt.client.MethodCallback;
+    import org.fusesource.restygwt.client.RestService;
+    import ru.filin.DTO.QuizDTO;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.PathParam;
-import java.util.List;
+    import javax.ws.rs.GET;
+    import javax.ws.rs.POST;
+    import javax.ws.rs.Path;
+    import javax.ws.rs.PathParam;
+    import java.util.List;
 
 @Path("rest/quiz")
 public interface QuizService extends RestService {
