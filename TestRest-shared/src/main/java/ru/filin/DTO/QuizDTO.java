@@ -49,7 +49,7 @@ public class QuizDTO {
         return count;
     }
 
-    public Set<QuestionStandardDTO> getQuestionStandardDTO() {
+    public Set<QuestionStandardDTO> getQuestionStandardDTOS() {
         return questionStandardDTO;
     }
 

@@ -32,3 +32,8 @@ h1 {
 #closeButton {
   margin: 15px 6px 6px;
 }
+
+.gwt-grid {
+  border: solid 1px #000000;
+  color: red;
+}

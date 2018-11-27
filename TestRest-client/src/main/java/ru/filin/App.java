@@ -2,27 +2,26 @@ package ru.filin;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import org.fusesource.restygwt.client.Method;
-import org.fusesource.restygwt.client.MethodCallback;
+import ru.filin.DTO.QuestionStandardDTO;
+import ru.filin.DTO.QuestionType;
 import ru.filin.DTO.QuizDTO;
+import ru.filin.bll.QuizServiceImpl;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class App implements EntryPoint {
 
+    private final QuizServiceImpl quizService = new QuizServiceImpl(GWT.create(QuizService.class), this);
 
-    private final QuizService quizService = GWT.create(QuizService.class);
-
-    private final DialogBox editQuizDialogBox = new DialogBox();
-
-    private final DialogBox addQuestionDialogBox = new DialogBox();
+    private final VerticalPanel quizPanel = new VerticalPanel();
 
     private final TextBox editQuizTitleTextBox = new TextBox();
 
@@ -30,58 +29,35 @@ public class App implements EntryPoint {
 
     private final TextBox questionText = new TextBox();
 
+    private final VerticalPanel quizPanel2 = new VerticalPanel();
+    private final HorizontalPanel superQuizPanel = new HorizontalPanel();
+    VerticalPanel questionPanel = new VerticalPanel();
+
     @Override
     public void onModuleLoad() {
         RootPanel rootPanel = RootPanel.get("quizzes-container");
 
-        final VerticalPanel verticalPanel = new VerticalPanel();
-        rootPanel.add(verticalPanel);
+        rootPanel.add(quizPanel);
 
-        quizService.findAll(new MethodCallback<List<QuizDTO>>() {
-            @Override
-            public void onFailure(Method method, Throwable exception) {
-                throw new RuntimeException();
-            }
+        rootPanel.add(superQuizPanel);
 
-            @Override
-            public void onSuccess(Method method, List<QuizDTO> response) {
-                verticalPanel.add(new Label("Current count of quizzes:" + response.size()));
-                for (QuizDTO quizDTO : response) {
-                    Label quizLabel = new Label(quizDTO.getTitle().toUpperCase() + "    " + quizDTO.getCountOfQuestion() + " questions");
-                    quizLabel.addClickHandler(clickEvent -> {
-                        showEditQuizDialog(quizDTO);
-                    });
-                    verticalPanel.add(quizLabel);
-                }
-            }
-        });
+        quizService.findAll();
 
         Button addQuizButton = new Button("Create quiz");
         TextBox quizTitleTextBox = new TextBox();
 
-        addQuizButton.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-                QuizDTO quizDTO = new QuizDTO();
-                quizDTO.setTitle(quizTitleTextBox.getValue());
-                quizService.addQuiz(quizDTO, new MethodCallback<Void>() {
-                    @Override
-                    public void onFailure(Method method, Throwable exception) {
-                        Window.alert("error adding new quiz");
-                    }
-
-                    @Override
-                    public void onSuccess(Method method, Void response) {
-                        Window.alert("Success");
-                    }
-                });
-            }
+        addQuizButton.addClickHandler(event -> {
+            QuizDTO quizDTO = new QuizDTO();
+            quizDTO.setTitle(quizTitleTextBox.getValue());
+            quizService.addQuiz(quizDTO);
+            refreshQuizList();
         });
 
 
         rootPanel.add(addQuizButton);
         rootPanel.add(quizTitleTextBox);
     }
+
 
     private DialogBox showEditQuizDialog(QuizDTO quizDTO) {
 
@@ -101,9 +77,9 @@ public class App implements EntryPoint {
             });
         }
 
-        if (quizDTO.getQuestionStandardDTO() != null) {
-            dialog.add(new Label("Standard questions - " + quizDTO.getQuestionStandardDTO().size()));
-            quizDTO.getQuestionStandardDTO().stream().forEach(q -> {
+        if (quizDTO.getQuestionStandardDTOS() != null) {
+            dialog.add(new Label("Standard questions - " + quizDTO.getQuestionStandardDTOS().size()));
+            quizDTO.getQuestionStandardDTOS().stream().forEach(q -> {
                 dialog.add(new Label(q.getText()));
             });
         }
@@ -120,7 +96,7 @@ public class App implements EntryPoint {
         return dialog;
     }
 
-    private void initAddNewQuestionButton(){
+    private void initAddNewQuestionButton() {
         addNewQuestionButton.addClickHandler(clickEvent -> {
 
         });
@@ -142,6 +118,145 @@ public class App implements EntryPoint {
 
         Button send = new Button("send");
         horizontalPanel.add(send);
+    }
 
+    public void refreshQuizList() {
+        quizPanel.clear();
+
+        List<QuizDTO> quizzes = quizService.getQuizzes();
+
+        Grid grid = new Grid(quizzes.size() + 1, 2);
+
+        grid.setWidget(0, 0, new Label("Title"));
+        grid.setWidget(0, 1, new Label("Questions"));
+        for (int i = 0; i < quizzes.size(); i++) {
+            grid.setWidget(i + 1, 0, new Label(quizzes.get(i).getTitle()));
+            grid.setWidget(i + 1, 1, new Label(Integer.toString(quizzes.get(i).getCountOfQuestion())));
+        }
+
+        quizPanel.add(grid);
+    }
+
+    public void refreshQuizList2() {
+        quizPanel2.clear();
+
+        List<QuizDTO> quizzes = quizService.getQuizzes();
+
+        HorizontalPanel horizontalPanel = new HorizontalPanel();
+        Grid grid = new Grid(quizzes.size() + 1, 2);
+
+        horizontalPanel.add(grid);
+
+
+        grid.setWidget(0, 0, new Label("Title"));
+        grid.setWidget(0, 1, new Label("Questions"));
+        for (int i = 0; i < quizzes.size(); i++) {
+            Label title = new Label(quizzes.get(i).getTitle());
+            chooseQuiz(title);
+            grid.setWidget(i + 1, 0, title);
+            grid.setWidget(i + 1, 1, new Label(Integer.toString(quizzes.get(i).getCountOfQuestion())));
+        }
+
+        grid.addStyleName("gwt-grid");
+        superQuizPanel.add(grid);
+
+        VerticalPanel questionPanel = new VerticalPanel();
+        questionPanel.add(new Label("questions"));
+
+        questionPanel.add(questionPanel);
+        questionPanel.add(new Label("Questions list1"));
+
+    }
+
+
+    private void chooseQuiz(Label widget) {
+        widget.addClickHandler(clickEvent -> {
+            questionPanel.clear();
+            QuizDTO quiz = null;
+            for (QuizDTO item : quizService.getQuizzes()) {
+                if (item.getTitle().equals(widget.getText())) {
+                    quiz = item;
+                }
+            }
+
+            questionPanel.add(new Label("Questions list of " + quiz.getTitle()));
+
+            if (quiz == null) throw new IllegalArgumentException();
+
+            HorizontalPanel row = new HorizontalPanel();
+
+            Set<QuestionStandardDTO> questionStandardDTOS = quiz.getQuestionStandardDTOS();
+
+
+            for (int i = 0; i < quiz.getCountOfQuestion(); i++) {
+                if (quiz.getQuestionStandardDTOS() == null) {
+                    Iterator<QuestionStandardDTO> iteratorQuestionStandardDTO = questionStandardDTOS.iterator();
+                    if (iteratorQuestionStandardDTO.hasNext()) {
+                        QuestionStandardDTO question = iteratorQuestionStandardDTO.next();
+                        row.add(new Label(i + 1 + "."));
+                        row.add(new Label(question.getText()));
+                        row.add(new Label(QuestionType.STANDARD.name()));
+                    }
+                }
+            }
+
+            questionPanel.add(row);
+            Button addQuestionButton = new Button("add question");
+            questionPanel.add(addQuestionButton);
+
+            //todo fix final
+            QuizDTO temp = quiz;
+            addQuestionButton.addClickHandler(clickEvent1 -> {
+                DialogBox newQuestionBox = new DialogBox();
+                VerticalPanel verticalPanel = new VerticalPanel();
+                ListBox questionType = new ListBox();
+                for (QuestionType type : QuestionType.values()) {
+                    questionType.addItem(type.name());
+                }
+
+                verticalPanel.add(questionType);
+                TextBox questionText = new TextBox();
+                verticalPanel.add(questionText);
+
+                Button sendNewQuestion = new Button("ok");
+                Button close = new Button("close");
+
+                sendNewQuestion.addClickHandler(e -> {
+                    if (temp.getQuestionStandardDTOS() == null) {
+//                        HashSet<QuestionStandardDTO> questionStandardDTOS1 = new HashSet<>();
+//                        QuestionStandardDTO question = new QuestionStandardDTO();
+//                        question.setText(questionText.getText());
+//
+//                        //todo add answer
+//                        question.setAnswerStandardDTOS(null);
+//                        questionStandardDTOS1.add(question);
+//                        temp.setQuestionStandardDTO(questionStandardDTOS1);
+
+                        Window.alert(Boolean.toString("s" + temp.getQuestionStandardDTOS() == null));
+                        Window.alert(Boolean.toString("f" + temp.getQuestionFreeTextDTOS() == null));
+                        Window.alert(Boolean.toString("g" + temp.getQuestionGroupDTOS() == null));
+                        quizService.update(temp);
+                    } else {
+                        Window.alert("Questions was");
+                    }
+                });
+
+                HorizontalPanel horizontalPanel = new HorizontalPanel();
+                horizontalPanel.add(close);
+                horizontalPanel.add(sendNewQuestion);
+
+
+                verticalPanel.add(horizontalPanel);
+                verticalPanel.add(sendNewQuestion);
+
+                newQuestionBox.add(verticalPanel);
+
+                newQuestionBox.show();
+
+
+            });
+
+            superQuizPanel.add(questionPanel);
+        });
     }
 }

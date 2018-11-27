@@ -1,6 +1,8 @@
 package ru.filin.testSystem.domain;
 
 
+import ru.filin.DTO.QuizDTO;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.HashSet;
@@ -32,6 +34,7 @@ public class Quiz implements Serializable {
 
     public Quiz() {
     }
+
 
     public long getId() {
         return id;

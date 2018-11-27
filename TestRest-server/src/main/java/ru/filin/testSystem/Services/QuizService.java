@@ -33,4 +33,7 @@ public class QuizService {
     }
 
 
+    public void save(Quiz quiz) {
+        quizRepository.save(quiz);
+    }
 }

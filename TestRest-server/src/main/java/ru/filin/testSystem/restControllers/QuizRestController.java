@@ -32,4 +32,10 @@ public class QuizRestController {
         quizService.add(quiz1);
     }
 
+    @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
+    public void putQuiz(@RequestBody Quiz quizDTO) {
+        quizService.save(quizDTO);
+    }
+
+
 }

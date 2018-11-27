@@ -1,6 +1,7 @@
 package ru.filin.testSystem.domain;
 
 
+import ru.filin.DTO.QuestionStandardDTO;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -23,6 +24,11 @@ public class QuestionStandard {
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
             targetEntity = AnswerStandard.class, mappedBy = "questionStandard")
     private Set<AnswerStandard> answerStandards = new HashSet<>();
+
+
+    public QuestionStandard() {
+    }
+
 
 
     public long getId() {
