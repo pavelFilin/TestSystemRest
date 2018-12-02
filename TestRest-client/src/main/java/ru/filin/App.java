@@ -4,9 +4,10 @@ import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import ru.filin.DTO.QuestionStandardDTO;
+import ru.filin.DTO.QuestionFreeText;
+import ru.filin.DTO.QuestionStandard;
 import ru.filin.DTO.QuestionType;
-import ru.filin.DTO.QuizDTO;
+import ru.filin.DTO.Quiz;
 import ru.filin.bll.QuizServiceImpl;
 
 import java.util.HashSet;
@@ -21,23 +22,19 @@ public class App implements EntryPoint {
 
     private final QuizServiceImpl quizService = new QuizServiceImpl(GWT.create(QuizService.class), this);
 
-    private final VerticalPanel quizPanel = new VerticalPanel();
-
     private final TextBox editQuizTitleTextBox = new TextBox();
 
     private final Button addNewQuestionButton = new Button("Add question");
 
     private final TextBox questionText = new TextBox();
 
-    private final VerticalPanel quizPanel2 = new VerticalPanel();
+    private final VerticalPanel quizList = new VerticalPanel();
     private final HorizontalPanel superQuizPanel = new HorizontalPanel();
     VerticalPanel questionPanel = new VerticalPanel();
 
     @Override
     public void onModuleLoad() {
         RootPanel rootPanel = RootPanel.get("quizzes-container");
-
-        rootPanel.add(quizPanel);
 
         rootPanel.add(superQuizPanel);
 
@@ -47,9 +44,9 @@ public class App implements EntryPoint {
         TextBox quizTitleTextBox = new TextBox();
 
         addQuizButton.addClickHandler(event -> {
-            QuizDTO quizDTO = new QuizDTO();
-            quizDTO.setTitle(quizTitleTextBox.getValue());
-            quizService.addQuiz(quizDTO);
+            Quiz quiz = new Quiz();
+            quiz.setTitle(quizTitleTextBox.getValue());
+            quizService.addQuiz(quiz);
             refreshQuizList();
         });
 
@@ -59,34 +56,34 @@ public class App implements EntryPoint {
     }
 
 
-    private DialogBox showEditQuizDialog(QuizDTO quizDTO) {
+    private DialogBox showEditQuizDialog(Quiz quiz) {
 
         final DialogBox dialog = new DialogBox(true, true);
         FlowPanel flowPanel = new FlowPanel();
         dialog.setText("Edit quiz");
-        editQuizTitleTextBox.setValue(quizDTO.getTitle());
+        editQuizTitleTextBox.setValue(quiz.getTitle());
         dialog.add(editQuizTitleTextBox);
 
         dialog.add(addNewQuestionButton);
 
-        if (quizDTO.getQuestionFreeTextDTOS() != null) {
-            Window.alert(quizDTO.getQuestionFreeTextDTOS().toString());
-            dialog.add(new Label("Free text questions - " + quizDTO.getQuestionFreeTextDTOS().size()));
-            quizDTO.getQuestionFreeTextDTOS().stream().forEach(q -> {
+        if (quiz.getQuestionFreeTexts() != null) {
+            Window.alert(quiz.getQuestionFreeTexts().toString());
+            dialog.add(new Label("Free text questions - " + quiz.getQuestionFreeTexts().size()));
+            quiz.getQuestionFreeTexts().stream().forEach(q -> {
                 dialog.add(new Label(q.getText()));
             });
         }
 
-        if (quizDTO.getQuestionStandardDTOS() != null) {
-            dialog.add(new Label("Standard questions - " + quizDTO.getQuestionStandardDTOS().size()));
-            quizDTO.getQuestionStandardDTOS().stream().forEach(q -> {
+        if (quiz.getQuestionStandard() != null) {
+            dialog.add(new Label("Standard questions - " + quiz.getQuestionStandard().size()));
+            quiz.getQuestionStandard().stream().forEach(q -> {
                 dialog.add(new Label(q.getText()));
             });
         }
 
-        if (quizDTO.getQuestionGroupDTOS() != null) {
-            dialog.add(new Label("Group questions - " + quizDTO.getQuestionGroupDTOS().size()));
-            quizDTO.getQuestionGroupDTOS().stream().forEach(q -> {
+        if (quiz.getQuestionGroups() != null) {
+            dialog.add(new Label("Group questions - " + quiz.getQuestionGroups().size()));
+            quiz.getQuestionGroups().stream().forEach(q -> {
                 dialog.add(new Label(q.getText()));
             });
         }
@@ -120,27 +117,11 @@ public class App implements EntryPoint {
         horizontalPanel.add(send);
     }
 
+
     public void refreshQuizList() {
-        quizPanel.clear();
+        quizList.clear();
 
-        List<QuizDTO> quizzes = quizService.getQuizzes();
-
-        Grid grid = new Grid(quizzes.size() + 1, 2);
-
-        grid.setWidget(0, 0, new Label("Title"));
-        grid.setWidget(0, 1, new Label("Questions"));
-        for (int i = 0; i < quizzes.size(); i++) {
-            grid.setWidget(i + 1, 0, new Label(quizzes.get(i).getTitle()));
-            grid.setWidget(i + 1, 1, new Label(Integer.toString(quizzes.get(i).getCountOfQuestion())));
-        }
-
-        quizPanel.add(grid);
-    }
-
-    public void refreshQuizList2() {
-        quizPanel2.clear();
-
-        List<QuizDTO> quizzes = quizService.getQuizzes();
+        List<Quiz> quizzes = quizService.getQuizzes();
 
         HorizontalPanel horizontalPanel = new HorizontalPanel();
         Grid grid = new Grid(quizzes.size() + 1, 2);
@@ -172,8 +153,8 @@ public class App implements EntryPoint {
     private void chooseQuiz(Label widget) {
         widget.addClickHandler(clickEvent -> {
             questionPanel.clear();
-            QuizDTO quiz = null;
-            for (QuizDTO item : quizService.getQuizzes()) {
+            Quiz quiz = null;
+            for (Quiz item : quizService.getQuizzes()) {
                 if (item.getTitle().equals(widget.getText())) {
                     quiz = item;
                 }
@@ -185,14 +166,14 @@ public class App implements EntryPoint {
 
             HorizontalPanel row = new HorizontalPanel();
 
-            Set<QuestionStandardDTO> questionStandardDTOS = quiz.getQuestionStandardDTOS();
+            Set<QuestionStandard> questionStandards = quiz.getQuestionStandard();
 
 
             for (int i = 0; i < quiz.getCountOfQuestion(); i++) {
-                if (quiz.getQuestionStandardDTOS() == null) {
-                    Iterator<QuestionStandardDTO> iteratorQuestionStandardDTO = questionStandardDTOS.iterator();
+                if (quiz.getQuestionStandard() == null) {
+                    Iterator<QuestionStandard> iteratorQuestionStandardDTO = questionStandards.iterator();
                     if (iteratorQuestionStandardDTO.hasNext()) {
-                        QuestionStandardDTO question = iteratorQuestionStandardDTO.next();
+                        QuestionStandard question = iteratorQuestionStandardDTO.next();
                         row.add(new Label(i + 1 + "."));
                         row.add(new Label(question.getText()));
                         row.add(new Label(QuestionType.STANDARD.name()));
@@ -205,14 +186,16 @@ public class App implements EntryPoint {
             questionPanel.add(addQuestionButton);
 
             //todo fix final
-            QuizDTO temp = quiz;
+            Quiz temp = quiz;
             addQuestionButton.addClickHandler(clickEvent1 -> {
+                superQuizPanel.clear();
                 DialogBox newQuestionBox = new DialogBox();
                 VerticalPanel verticalPanel = new VerticalPanel();
                 ListBox questionType = new ListBox();
                 for (QuestionType type : QuestionType.values()) {
                     questionType.addItem(type.name());
                 }
+
 
                 verticalPanel.add(questionType);
                 TextBox questionText = new TextBox();
@@ -222,20 +205,25 @@ public class App implements EntryPoint {
                 Button close = new Button("close");
 
                 sendNewQuestion.addClickHandler(e -> {
-                    if (temp.getQuestionStandardDTOS() == null) {
-//                        HashSet<QuestionStandardDTO> questionStandardDTOS1 = new HashSet<>();
-//                        QuestionStandardDTO question = new QuestionStandardDTO();
-//                        question.setText(questionText.getText());
-//
-//                        //todo add answer
-//                        question.setAnswerStandardDTOS(null);
-//                        questionStandardDTOS1.add(question);
-//                        temp.setQuestionStandardDTO(questionStandardDTOS1);
+                    if (temp.getQuestionFreeTexts() == null) {
+                        HashSet<QuestionFreeText> questionFreeText1 = new HashSet<>();
+                        QuestionFreeText question = new QuestionFreeText();
+                        question.setText(questionText.getText());
 
-                        Window.alert(Boolean.toString("s" + temp.getQuestionStandardDTOS() == null));
-                        Window.alert(Boolean.toString("f" + temp.getQuestionFreeTextDTOS() == null));
-                        Window.alert(Boolean.toString("g" + temp.getQuestionGroupDTOS() == null));
+                        //todo add answer
+                        question.setAnswerFreeText(null);
+                        questionFreeText1.add(question);
+                        temp.setQuestionFreeTexts(questionFreeText1);
+
+//                        GWT.log(temp.getQuestionFreeText().toString());
+//                        Window.alert(temp.getQuestionFreeText().toString());
+
+                        Window.alert("s" + Boolean.toString( temp.getQuestionStandard() == null));
+                        Window.alert("f" + Boolean.toString( temp.getQuestionFreeTexts() == null));
+                        Window.alert("g" + Boolean.toString( temp.getQuestionGroups() == null));
                         quizService.update(temp);
+
+
                     } else {
                         Window.alert("Questions was");
                     }

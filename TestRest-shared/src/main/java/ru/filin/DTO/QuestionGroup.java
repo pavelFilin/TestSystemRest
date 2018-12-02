@@ -1,13 +1,11 @@
 package ru.filin.DTO;
 
-
-public class QuestionGroupDTO {
-
+public class QuestionGroup {
     private long id;
 
     private String text;
 
-    private QuizDTO quizDTO;
+    private Quiz quiz;
 
     public long getId() {
         return id;
@@ -25,11 +23,11 @@ public class QuestionGroupDTO {
         this.text = text;
     }
 
-    public QuizDTO getQuizDTO() {
-        return quizDTO;
+    public Quiz getQuiz() {
+        return quiz;
     }
 
-    public void setQuizDTO(QuizDTO quizDTO) {
-        this.quizDTO = quizDTO;
+    public void setQuiz(Quiz quiz) {
+        this.quiz = quiz;
     }
 }

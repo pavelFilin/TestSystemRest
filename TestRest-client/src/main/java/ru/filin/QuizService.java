@@ -1,26 +1,25 @@
 package ru.filin;
 
-    import org.fusesource.restygwt.client.Method;
-    import org.fusesource.restygwt.client.MethodCallback;
-    import org.fusesource.restygwt.client.RestService;
-    import ru.filin.DTO.QuizDTO;
+import org.fusesource.restygwt.client.MethodCallback;
+import org.fusesource.restygwt.client.RestService;
+import ru.filin.DTO.Quiz;
 
-    import javax.ws.rs.*;
-    import java.util.List;
+import javax.ws.rs.*;
+import java.util.List;
 
 @Path("rest/quiz")
 public interface QuizService extends RestService {
     @GET
-    public void findAll(MethodCallback<List<QuizDTO>> quizzes);
+    public void findAll(MethodCallback<List<Quiz>> quizzes);
 
     @GET
     @Path("{id}")
-    public void findByID(@PathParam("id") long id, MethodCallback<QuizDTO> quiz);
+    public void findByID(@PathParam("id") long id, MethodCallback<Quiz> quiz);
 
     @POST
-    public void addQuiz(QuizDTO quizDTO, MethodCallback<Void> callback);
+    public void addQuiz(Quiz quiz, MethodCallback<Void> callback);
 
     @PUT
-    public void updateQuiz(QuizDTO quizDTO, MethodCallback<Void> callback);
+    public void updateQuiz(Quiz quiz, MethodCallback<Void> callback);
 }
 

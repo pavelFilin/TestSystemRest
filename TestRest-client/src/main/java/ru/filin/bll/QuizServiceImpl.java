@@ -4,14 +4,14 @@ import com.google.gwt.user.client.Window;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ru.filin.App;
-import ru.filin.DTO.QuizDTO;
+import ru.filin.DTO.Quiz;
 import ru.filin.QuizService;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class QuizServiceImpl {
-    private List<QuizDTO> quizDTOS = new ArrayList<>();
+    private List<Quiz> quizzes = new ArrayList<>();
 
     private QuizService service;
 
@@ -22,25 +22,24 @@ public class QuizServiceImpl {
         this.app = app;
     }
 
-    public List<QuizDTO> findAll() {
-        service.findAll(new MethodCallback<List<QuizDTO>>() {
+    public List<Quiz> findAll() {
+        service.findAll(new MethodCallback<List<Quiz>>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
                 throw new RuntimeException();
             }
 
             @Override
-            public void onSuccess(Method method, List<QuizDTO> response) {
-                quizDTOS = response;
+            public void onSuccess(Method method, List<Quiz> response) {
+                quizzes = response;
                 app.refreshQuizList();
-                app.refreshQuizList2();
             }
         });
 
-        return quizDTOS;
+        return quizzes;
     }
 
-    public void addQuiz(QuizDTO quiz) {
+    public void addQuiz(Quiz quiz) {
         service.addQuiz(quiz, new MethodCallback<Void>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
@@ -55,11 +54,11 @@ public class QuizServiceImpl {
         });
     }
 
-    public List<QuizDTO> getQuizzes() {
-        return new ArrayList<>(quizDTOS);
+    public List<Quiz> getQuizzes() {
+        return new ArrayList<>(quizzes);
     }
 
-    public void update(QuizDTO quiz) {
+    public void update(Quiz quiz) {
         service.updateQuiz(quiz, new MethodCallback<Void>() {
             @Override
             public void onFailure(Method method, Throwable exception) {

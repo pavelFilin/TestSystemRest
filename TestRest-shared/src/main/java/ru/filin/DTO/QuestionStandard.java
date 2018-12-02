@@ -1,33 +1,22 @@
-package ru.filin.testSystem.domain;
+package ru.filin.DTO;
 
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "question_standard")
 public class QuestionStandard {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(length = 255)
     private String text;
 
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Quiz quiz;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
-            targetEntity = AnswerStandard.class, mappedBy = "questionStandard")
     private Set<AnswerStandard> answerStandards = new HashSet<>();
 
 
     public QuestionStandard() {
     }
-
-
 
     public long getId() {
         return id;

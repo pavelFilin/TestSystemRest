@@ -1,14 +1,14 @@
 package ru.filin.DTO;
 
-public class AnswerStandardDTO {
 
+public class AnswerStandard {
     private long id;
 
     private String answerText;
 
     private boolean isRightAnswer;
 
-    private QuestionStandardDTO questionStandardDTO;
+    private QuestionStandard questionStandard;
 
     public long getId() {
         return id;
@@ -34,11 +34,11 @@ public class AnswerStandardDTO {
         isRightAnswer = rightAnswer;
     }
 
-    public QuestionStandardDTO getQuestionStandardDTO() {
-        return questionStandardDTO;
+    public QuestionStandard getQuestionStandard() {
+        return questionStandard;
     }
 
-    public void setQuestionStandardDTO(QuestionStandardDTO questionStandardDTO) {
-        this.questionStandardDTO = questionStandardDTO;
+    public void setQuestionStandard(QuestionStandard questionStandard) {
+        this.questionStandard = questionStandard;
     }
 }

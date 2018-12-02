@@ -1,13 +1,12 @@
 package ru.filin.DTO;
 
 
-public class AnswerFreeTextDTO {
-
+public class AnswerFreeText {
     private long id;
 
     private String answerText;
 
-    private QuestionFreeTextDTO questionFreeTextDTO;
+    private QuestionFreeText questionFreeText;
 
     public long getId() {
         return id;
@@ -25,11 +24,11 @@ public class AnswerFreeTextDTO {
         this.answerText = answerText;
     }
 
-    public QuestionFreeTextDTO getQuestionFreeTextDTO() {
-        return questionFreeTextDTO;
+    public QuestionFreeText getQuestionFreeText() {
+        return questionFreeText;
     }
 
-    public void setQuestionFreeTextDTO(QuestionFreeTextDTO questionFreeTextDTO) {
-        this.questionFreeTextDTO = questionFreeTextDTO;
+    public void setQuestionFreeText(QuestionFreeText questionFreeText) {
+        this.questionFreeText = questionFreeText;
     }
 }
