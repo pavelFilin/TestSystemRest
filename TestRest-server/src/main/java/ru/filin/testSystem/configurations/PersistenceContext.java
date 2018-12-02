@@ -21,10 +21,6 @@ import java.util.Properties;
 @Configuration
 @EnableJpaRepositories(basePackages = "ru.filin.testSystem.repositories")
 public class PersistenceContext {
-    @Bean
-    public String myBean() {
-        return "223";
-    }
 
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -46,7 +42,7 @@ public class PersistenceContext {
         dataSource.setDriverClassName("com.mysql.cj.jdbc.Driver");
         dataSource.setUrl("jdbc:mysql://localhost:3306/test_system?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC");
         dataSource.setUsername("root");
-        dataSource.setPassword("rootroot");
+        dataSource.setPassword("2017");
         return dataSource;
     }
 

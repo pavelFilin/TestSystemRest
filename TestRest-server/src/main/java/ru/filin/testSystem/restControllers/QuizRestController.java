@@ -34,15 +34,8 @@ public class QuizRestController {
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public void putQuiz(@RequestBody Quiz quiz) {
         System.out.println(quiz);
-//        quizService.save(quiz);
+        quiz.getQuestionFreeTexts().forEach(q->q.setQuiz(quiz));
+        quizService.save(quiz);
     }
-
-//    @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
-    @PutMapping
-    public void putQuiz(@RequestBody Map<String, String> quizDTO) {
-//        quizService.save(quizDTO);
-        System.out.println(quizDTO);
-    }
-
 
 }

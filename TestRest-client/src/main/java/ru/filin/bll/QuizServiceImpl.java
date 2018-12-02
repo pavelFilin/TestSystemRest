@@ -59,11 +59,12 @@ public class QuizServiceImpl {
     }
 
     public void update(Quiz quiz) {
+        Window.alert("append");
         service.updateQuiz(quiz, new MethodCallback<Void>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
                 Window.alert("ddd");
-                throw new RuntimeException();
+//                throw new RuntimeException();
             }
 
             @Override

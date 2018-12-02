@@ -61,6 +61,6 @@ public class Quiz implements Serializable {
     }
 
     public int getCountOfQuestion() {
-        return 0;
+        return questionFreeTexts.size();
     }
 }

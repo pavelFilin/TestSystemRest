@@ -70,4 +70,7 @@ public class Quiz implements Serializable {
         this.questionGroups = questionGroups;
     }
 
+    public Set<QuestionFreeText> getQuestionFreeTexts() {
+        return questionFreeTexts;
+    }
 }

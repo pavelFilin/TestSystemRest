@@ -36,6 +36,8 @@ public class App implements EntryPoint {
     public void onModuleLoad() {
         RootPanel rootPanel = RootPanel.get("quizzes-container");
 
+
+        superQuizPanel.add(quizList);
         rootPanel.add(superQuizPanel);
 
         quizService.findAll();
@@ -57,7 +59,6 @@ public class App implements EntryPoint {
 
 
     private DialogBox showEditQuizDialog(Quiz quiz) {
-
         final DialogBox dialog = new DialogBox(true, true);
         FlowPanel flowPanel = new FlowPanel();
         dialog.setText("Edit quiz");
@@ -93,31 +94,6 @@ public class App implements EntryPoint {
         return dialog;
     }
 
-    private void initAddNewQuestionButton() {
-        addNewQuestionButton.addClickHandler(clickEvent -> {
-
-        });
-    }
-
-    private void showAddQuestionDialog() {
-
-    }
-
-    private void initAddQuestionDialogBox() {
-        ListBox listBox = new ListBox();
-        listBox.addItem("Free text");
-        listBox.addItem("Standard");
-        HorizontalPanel horizontalPanel = new HorizontalPanel();
-        horizontalPanel.add(listBox);
-        horizontalPanel.setSpacing(2);
-
-        horizontalPanel.add(questionText);
-
-        Button send = new Button("send");
-        horizontalPanel.add(send);
-    }
-
-
     public void refreshQuizList() {
         quizList.clear();
 
@@ -127,7 +103,6 @@ public class App implements EntryPoint {
         Grid grid = new Grid(quizzes.size() + 1, 2);
 
         horizontalPanel.add(grid);
-
 
         grid.setWidget(0, 0, new Label("Title"));
         grid.setWidget(0, 1, new Label("Questions"));
@@ -139,18 +114,14 @@ public class App implements EntryPoint {
         }
 
         grid.addStyleName("gwt-grid");
-        superQuizPanel.add(grid);
 
-        VerticalPanel questionPanel = new VerticalPanel();
-        questionPanel.add(new Label("questions"));
-
-        questionPanel.add(questionPanel);
-        questionPanel.add(new Label("Questions list1"));
-
+        quizList.add(grid);
     }
 
 
     private void chooseQuiz(Label widget) {
+
+
         widget.addClickHandler(clickEvent -> {
             questionPanel.clear();
             Quiz quiz = null;
@@ -167,7 +138,6 @@ public class App implements EntryPoint {
             HorizontalPanel row = new HorizontalPanel();
 
             Set<QuestionStandard> questionStandards = quiz.getQuestionStandard();
-
 
             for (int i = 0; i < quiz.getCountOfQuestion(); i++) {
                 if (quiz.getQuestionStandard() == null) {
@@ -188,14 +158,13 @@ public class App implements EntryPoint {
             //todo fix final
             Quiz temp = quiz;
             addQuestionButton.addClickHandler(clickEvent1 -> {
-                superQuizPanel.clear();
-                DialogBox newQuestionBox = new DialogBox();
+                DialogBox newQuestionBox = new DialogBox(true);
+
                 VerticalPanel verticalPanel = new VerticalPanel();
                 ListBox questionType = new ListBox();
                 for (QuestionType type : QuestionType.values()) {
                     questionType.addItem(type.name());
                 }
-
 
                 verticalPanel.add(questionType);
                 TextBox questionText = new TextBox();
@@ -204,28 +173,31 @@ public class App implements EntryPoint {
                 Button sendNewQuestion = new Button("ok");
                 Button close = new Button("close");
 
+                close.addClickHandler(e-> newQuestionBox.hide());
+
                 sendNewQuestion.addClickHandler(e -> {
                     if (temp.getQuestionFreeTexts() == null) {
-                        HashSet<QuestionFreeText> questionFreeText1 = new HashSet<>();
+
+                        Set<QuestionFreeText> questionFreeTexts = new HashSet<>();
+                        QuestionFreeText question = new QuestionFreeText();
+                        question.setText(questionText.getText());
+                        //todo add answer
+
+                        questionFreeTexts.add(question);
+                        question.setQuiz(temp);
+                        temp.setQuestionFreeTexts(questionFreeTexts);
+
+                        quizService.update(temp);
+
+                    } else {
                         QuestionFreeText question = new QuestionFreeText();
                         question.setText(questionText.getText());
 
                         //todo add answer
-                        question.setAnswerFreeText(null);
-                        questionFreeText1.add(question);
-                        temp.setQuestionFreeTexts(questionFreeText1);
+                        question.setQuiz(temp);
+                        temp.getQuestionFreeTexts().add(question);
 
-//                        GWT.log(temp.getQuestionFreeText().toString());
-//                        Window.alert(temp.getQuestionFreeText().toString());
-
-                        Window.alert("s" + Boolean.toString( temp.getQuestionStandard() == null));
-                        Window.alert("f" + Boolean.toString( temp.getQuestionFreeTexts() == null));
-                        Window.alert("g" + Boolean.toString( temp.getQuestionGroups() == null));
                         quizService.update(temp);
-
-
-                    } else {
-                        Window.alert("Questions was");
                     }
                 });
 
@@ -233,15 +205,12 @@ public class App implements EntryPoint {
                 horizontalPanel.add(close);
                 horizontalPanel.add(sendNewQuestion);
 
-
                 verticalPanel.add(horizontalPanel);
                 verticalPanel.add(sendNewQuestion);
 
                 newQuestionBox.add(verticalPanel);
 
                 newQuestionBox.show();
-
-
             });
 
             superQuizPanel.add(questionPanel);
