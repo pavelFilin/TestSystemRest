@@ -37,3 +37,7 @@ h1 {
   border: solid 1px #000000;
   color: red;
 }
+
+.gwt-Label {
+  margin: 5px;
+}

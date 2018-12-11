@@ -9,6 +9,7 @@ import ru.filin.DTO.QuestionStandard;
 import ru.filin.DTO.QuestionType;
 import ru.filin.DTO.Quiz;
 import ru.filin.bll.QuizServiceImpl;
+import ru.filin.bll.widgets.AdminQuizPanel;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -26,19 +27,20 @@ public class App implements EntryPoint {
 
     private final Button addNewQuestionButton = new Button("Add question");
 
-    private final TextBox questionText = new TextBox();
-
     private final VerticalPanel quizList = new VerticalPanel();
     private final HorizontalPanel superQuizPanel = new HorizontalPanel();
     VerticalPanel questionPanel = new VerticalPanel();
+
+    AdminQuizPanel adminQuizPanel = new AdminQuizPanel("admin-quiz-list");
 
     @Override
     public void onModuleLoad() {
         RootPanel rootPanel = RootPanel.get("quizzes-container");
 
 
-        superQuizPanel.add(quizList);
-        rootPanel.add(superQuizPanel);
+//        superQuizPanel.add(quizList);
+//        rootPanel.add(superQuizPanel);
+        rootPanel.add(adminQuizPanel);
 
         quizService.findAll();
 
@@ -49,7 +51,8 @@ public class App implements EntryPoint {
             Quiz quiz = new Quiz();
             quiz.setTitle(quizTitleTextBox.getValue());
             quizService.addQuiz(quiz);
-            refreshQuizList();
+            adminQuizPanel.refresh(quizService);
+//            refreshQuizList();
         });
 
 
@@ -57,42 +60,6 @@ public class App implements EntryPoint {
         rootPanel.add(quizTitleTextBox);
     }
 
-
-    private DialogBox showEditQuizDialog(Quiz quiz) {
-        final DialogBox dialog = new DialogBox(true, true);
-        FlowPanel flowPanel = new FlowPanel();
-        dialog.setText("Edit quiz");
-        editQuizTitleTextBox.setValue(quiz.getTitle());
-        dialog.add(editQuizTitleTextBox);
-
-        dialog.add(addNewQuestionButton);
-
-        if (quiz.getQuestionFreeTexts() != null) {
-            Window.alert(quiz.getQuestionFreeTexts().toString());
-            dialog.add(new Label("Free text questions - " + quiz.getQuestionFreeTexts().size()));
-            quiz.getQuestionFreeTexts().stream().forEach(q -> {
-                dialog.add(new Label(q.getText()));
-            });
-        }
-
-        if (quiz.getQuestionStandard() != null) {
-            dialog.add(new Label("Standard questions - " + quiz.getQuestionStandard().size()));
-            quiz.getQuestionStandard().stream().forEach(q -> {
-                dialog.add(new Label(q.getText()));
-            });
-        }
-
-        if (quiz.getQuestionGroups() != null) {
-            dialog.add(new Label("Group questions - " + quiz.getQuestionGroups().size()));
-            quiz.getQuestionGroups().stream().forEach(q -> {
-                dialog.add(new Label(q.getText()));
-            });
-        }
-
-        dialog.setPopupPosition(100, 150);
-        dialog.show();
-        return dialog;
-    }
 
     public void refreshQuizList() {
         quizList.clear();
@@ -120,8 +87,6 @@ public class App implements EntryPoint {
 
 
     private void chooseQuiz(Label widget) {
-
-
         widget.addClickHandler(clickEvent -> {
             questionPanel.clear();
             Quiz quiz = null;
@@ -134,24 +99,30 @@ public class App implements EntryPoint {
             questionPanel.add(new Label("Questions list of " + quiz.getTitle()));
 
             if (quiz == null) throw new IllegalArgumentException();
-
-            HorizontalPanel row = new HorizontalPanel();
-
-            Set<QuestionStandard> questionStandards = quiz.getQuestionStandard();
-
-            for (int i = 0; i < quiz.getCountOfQuestion(); i++) {
-                if (quiz.getQuestionStandard() == null) {
-                    Iterator<QuestionStandard> iteratorQuestionStandardDTO = questionStandards.iterator();
-                    if (iteratorQuestionStandardDTO.hasNext()) {
-                        QuestionStandard question = iteratorQuestionStandardDTO.next();
-                        row.add(new Label(i + 1 + "."));
-                        row.add(new Label(question.getText()));
-                        row.add(new Label(QuestionType.STANDARD.name()));
-                    }
+                int i=0;
+                Iterator<QuestionStandard> iteratorQuestionStandard = quiz.getQuestionStandard().iterator();
+                while (iteratorQuestionStandard.hasNext()){
+                    HorizontalPanel row = new HorizontalPanel();
+                    QuestionStandard question = iteratorQuestionStandard.next();
+                    row.add(new Label( + 1 + ". "));
+                    row.add(new Label(question.getText()));
+                    row.add(new Label(QuestionType.STANDARD.name()));
+                    questionPanel.add(row);
                 }
-            }
 
-            questionPanel.add(row);
+
+                Iterator<QuestionFreeText> questionFreeTextIterator = quiz.getQuestionFreeTexts().iterator();
+                while (questionFreeTextIterator.hasNext()) {
+                    HorizontalPanel row = new HorizontalPanel();
+                    QuestionFreeText question = questionFreeTextIterator.next();
+                    row.add(new Label(i + 1 + ". "));
+                    row.add(new Label(question.getText()));
+                    row.add(new Label(QuestionType.FREE_TEXT.name()));
+                    questionPanel.add(row);
+                }
+
+
+
             Button addQuestionButton = new Button("add question");
             questionPanel.add(addQuestionButton);
 
@@ -173,7 +144,7 @@ public class App implements EntryPoint {
                 Button sendNewQuestion = new Button("ok");
                 Button close = new Button("close");
 
-                close.addClickHandler(e-> newQuestionBox.hide());
+                close.addClickHandler(e -> newQuestionBox.hide());
 
                 sendNewQuestion.addClickHandler(e -> {
                     if (temp.getQuestionFreeTexts() == null) {
@@ -194,7 +165,7 @@ public class App implements EntryPoint {
                         question.setText(questionText.getText());
 
                         //todo add answer
-                        question.setQuiz(temp);
+//                        question.setQuiz(temp);
                         temp.getQuestionFreeTexts().add(question);
 
                         quizService.update(temp);
@@ -215,5 +186,11 @@ public class App implements EntryPoint {
 
             superQuizPanel.add(questionPanel);
         });
+
+
+    }
+
+    public void refreshAdminPanel() {
+        adminQuizPanel.refresh(quizService);
     }
 }

@@ -8,7 +8,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "quiz")
-public class Quiz implements Serializable {
+public class Quiz{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

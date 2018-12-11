@@ -1,6 +1,5 @@
 package ru.filin.bll;
 
-import com.google.gwt.user.client.Window;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ru.filin.App;
@@ -32,7 +31,8 @@ public class QuizServiceImpl {
             @Override
             public void onSuccess(Method method, List<Quiz> response) {
                 quizzes = response;
-                app.refreshQuizList();
+                app.refreshAdminPanel();
+//                app.refreshQuizList();
             }
         });
 
@@ -49,7 +49,8 @@ public class QuizServiceImpl {
             @Override
             public void onSuccess(Method method, Void response) {
                 findAll();
-                app.refreshQuizList();
+                app.refreshAdminPanel();
+//                app.refreshQuizList();
             }
         });
     }
@@ -59,18 +60,17 @@ public class QuizServiceImpl {
     }
 
     public void update(Quiz quiz) {
-        Window.alert("append");
         service.updateQuiz(quiz, new MethodCallback<Void>() {
             @Override
             public void onFailure(Method method, Throwable exception) {
-                Window.alert("ddd");
-//                throw new RuntimeException();
+                throw new RuntimeException();
             }
 
             @Override
             public void onSuccess(Method method, Void response) {
                 findAll();
-                app.refreshQuizList();
+                app.refreshAdminPanel();
+//                app.refreshQuizList();
             }
         });
     }

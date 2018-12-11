@@ -5,7 +5,7 @@ import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Quiz implements Serializable {
+public class Quiz {
 
     private long id;
 
@@ -61,6 +61,6 @@ public class Quiz implements Serializable {
     }
 
     public int getCountOfQuestion() {
-        return questionFreeTexts.size();
+        return questionFreeTexts.size() + questionGroups.size() + questionStandard.size();
     }
 }
