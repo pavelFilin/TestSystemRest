@@ -1,6 +1,7 @@
 package ru.filin.bll.widgets;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
@@ -10,17 +11,21 @@ import ru.filin.DTO.QuestionGroup;
 import ru.filin.DTO.QuestionStandard;
 import ru.filin.DTO.Quiz;
 import ru.filin.QuizService;
-import ru.filin.bll.QuizServiceImpl;
 
 import java.util.Set;
 
 public class QuestionList extends VerticalPanel {
+    private Widget parent;
     QuizService quizService = GWT.create(QuizService.class);
     DialogBox addNewQuestionDialog = new DialogBox(true);
 
     private Quiz quiz;
 
     public QuestionList() {
+        initialize();
+    }
+    public QuestionList(Widget parent) {
+        this.parent = parent;
         initialize();
     }
 
@@ -40,7 +45,7 @@ public class QuestionList extends VerticalPanel {
 
             @Override
             public void onSuccess(Method method, Quiz response) {
-                th.add(new Label(new String(response.getTitle())));
+                th.add(new Label("questions of "+new String(response.getTitle())));
                 Set<QuestionStandard> questionStandard = response.getQuestionStandard();
                 Set<QuestionFreeText> questionFreeTexts = response.getQuestionFreeTexts();
                 Set<QuestionGroup> questionGroups = response.getQuestionGroups();
@@ -49,7 +54,9 @@ public class QuestionList extends VerticalPanel {
                     for (QuestionStandard question : questionStandard) {
                         HorizontalPanel questionPanel = new HorizontalPanel();
                         questionPanel.add(new Label(Integer.toString(i+1) + "."));
-                        questionPanel.add(new Label(question.getText()));
+                        Label textLabel = new Label(question.getText());
+                        chooseQuiz(textLabel, question);
+                        questionPanel.add(textLabel);
                         th.add(questionPanel);
                         i++;
                     }
@@ -57,7 +64,9 @@ public class QuestionList extends VerticalPanel {
                     for (QuestionFreeText question : questionFreeTexts) {
                         HorizontalPanel questionPanel = new HorizontalPanel();
                         questionPanel.add(new Label(Integer.toString(i+1) + "."));
-                        questionPanel.add(new Label(question.getText()));
+                        Label textLabel = new Label(question.getText());
+                        chooseQuiz(textLabel, question);
+                        questionPanel.add(textLabel);
                         th.add(questionPanel);
                         i++;
                     }
@@ -65,7 +74,9 @@ public class QuestionList extends VerticalPanel {
                     for (QuestionGroup question : questionGroups) {
                         HorizontalPanel questionPanel = new HorizontalPanel();
                         questionPanel.add(new Label(Integer.toString(i+1) + "."));
-                        questionPanel.add(new Label(question.getText()));
+                        Label textLabel = new Label(question.getText());
+                        chooseQuiz(textLabel, question);
+                        questionPanel.add(textLabel);
                         th.add(questionPanel);
                         i++;
                     }
@@ -122,6 +133,32 @@ public class QuestionList extends VerticalPanel {
                 });
             });
             addNewQuestionDialog.show();
+        });
+    }
+
+    private void chooseQuiz(HasClickHandlers source, QuestionStandard questionStandard) {
+        source.addClickHandler(event -> {
+            AnswerList answerList = ((AdminQuizPanel) parent).getAnswerList();
+            answerList.setQuiz(quiz);
+            answerList.setQuestion(questionStandard);
+            answerList.refresh();
+        });
+    }
+    private void chooseQuiz(HasClickHandlers source, QuestionFreeText questionFreeText) {
+        source.addClickHandler(event -> {
+            AnswerList answerList = ((AdminQuizPanel) parent).getAnswerList();
+            answerList.setQuiz(quiz);
+            answerList.setQuestion(questionFreeText);
+            answerList.refresh();
+        });
+    }
+
+    private void chooseQuiz(HasClickHandlers source, QuestionGroup questionGroup) {
+        source.addClickHandler(event -> {
+            AnswerList answerList = ((AdminQuizPanel) parent).getAnswerList();
+            answerList.setQuiz(quiz);
+            answerList.setQuestion(questionGroup);
+            answerList.refresh();
         });
     }
 }

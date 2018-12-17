@@ -27,16 +27,14 @@ public class QuizRestController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = "application/json")
-    public void addQuiz(@RequestBody ru.filin.testSystem.domain.Quiz quiz) {
-        ru.filin.testSystem.domain.Quiz quiz1 = new ru.filin.testSystem.domain.Quiz();
-        quiz1.setTitle(quiz.getTitle());
-        quizService.add(quiz1);
+    public void addQuiz(@RequestBody Quiz quiz) {
+        quizService.add(quiz);
     }
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public void putQuiz(@RequestBody Quiz quiz) {
-        System.out.println(quiz);
         quiz.getQuestionFreeTexts().forEach(q->q.setQuiz(quiz));
+        quiz.getQuestionFreeTexts().forEach(x->x.getAnswerFreeText().forEach(q->q.setQuestionFreeText(x)));
         quizService.save(quiz);
     }
 

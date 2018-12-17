@@ -6,7 +6,8 @@ import ru.filin.bll.QuizServiceImpl;
 
 public class AdminQuizPanel extends HorizontalPanel {
     private QuizList quizList = new QuizList(this);
-    private QuestionList questionList = new QuestionList();
+    private QuestionList questionList = new QuestionList(this);
+    private AnswerList answerList = new AnswerList(this);
 
     public AdminQuizPanel(String id) {
         initialize();
@@ -15,6 +16,7 @@ public class AdminQuizPanel extends HorizontalPanel {
     public void initialize() {
         this.add(quizList);
         this.add(questionList);
+        this.add(answerList);
     }
 
     public void refresh(QuizServiceImpl quizServiceImpl) {
@@ -27,5 +29,9 @@ public class AdminQuizPanel extends HorizontalPanel {
 
     public QuestionList getQuestionList() {
         return questionList;
+    }
+
+    public AnswerList getAnswerList() {
+        return answerList;
     }
 }

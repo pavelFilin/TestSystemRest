@@ -1,5 +1,7 @@
 package ru.filin.testSystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class AnswerFreeText {
     private String answerText;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnore
     private QuestionFreeText questionFreeText;
 
     public long getId() {

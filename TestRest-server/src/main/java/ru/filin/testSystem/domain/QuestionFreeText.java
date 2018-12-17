@@ -22,7 +22,9 @@ public class QuestionFreeText  {
     private Quiz quiz;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
-            targetEntity = AnswerFreeText.class, mappedBy = "questionFreeText")
+          targetEntity = AnswerFreeText.class)
+//   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
+//            targetEntity = AnswerFreeText.class, mappedBy = "questionFreeText")
     private Set<AnswerFreeText> answerFreeText = new HashSet<>();
 
     public long getId() {

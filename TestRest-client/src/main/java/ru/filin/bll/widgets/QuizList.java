@@ -1,5 +1,6 @@
 package ru.filin.bll.widgets;
 
+import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.DOM;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.ui.Grid;
@@ -45,11 +46,17 @@ public class QuizList extends HorizontalPanel {
 
     }
 
-    private void chooseQuiz(Label label, Quiz quiz) {
-        label.addClickHandler(event -> {
+    private void chooseQuiz(HasClickHandlers source, Quiz quiz) {
+        source.addClickHandler(event -> {
             QuestionList questionList = ((AdminQuizPanel) parent).getQuestionList();
             questionList.setQuiz(quiz);
             questionList.refresh();
+
+            AnswerList answerList = ((AdminQuizPanel) parent).getAnswerList();
+            if (answerList != null) {
+                answerList.clear();
+            }
+
         });
     }
 

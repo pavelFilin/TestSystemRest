@@ -1,5 +1,7 @@
 package ru.filin.testSystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -15,6 +17,7 @@ public class AnswerStandard {
     private boolean isRightAnswer;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnore
     private QuestionStandard questionStandard;
 
     public long getId() {
