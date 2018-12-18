@@ -1,14 +1,11 @@
 package ru.filin.bll.widgets;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ru.filin.DTO.*;
 import ru.filin.QuizService;
-
-import java.util.HashSet;
 
 public class AnswerList extends VerticalPanel {
     private QuizService quizService = GWT.create(QuizService.class);
@@ -55,6 +52,12 @@ public class AnswerList extends VerticalPanel {
 
                         HorizontalPanel answerPanel = new HorizontalPanel();
                         answerPanel.add(new Label(++count + ". " + answerStandard.getAnswerText()));
+
+                        CheckBox checkBox = new CheckBox("right");
+                        checkBox.setEnabled(false);
+                        checkBox.setValue(answerStandard.isRightAnswer());
+                        answerPanel.add(checkBox);
+
                         th.add(answerPanel);
                     }
                 } else if (questionFreeText != null) {
@@ -97,8 +100,6 @@ public class AnswerList extends VerticalPanel {
         Label infoLabel = new Label();
         dockPanel.add(infoLabel, DockPanel.NORTH);
 
-        HorizontalPanel answerPanel = new HorizontalPanel();
-
         TextBox answerText = new TextBox();
         dockPanel.add(answerText, DockPanel.CENTER);
 
@@ -109,14 +110,14 @@ public class AnswerList extends VerticalPanel {
         if (questionStandard != null) {
             questionType = QuestionType.STANDARD;
             infoLabel.setText("Standard");
-            dockPanel.add(isRightAnswer, DockPanel.CENTER);
+            dockPanel.add(isRightAnswer, DockPanel.EAST);
         } else if (questionFreeText != null) {
             questionType = QuestionType.FREE_TEXT;
             infoLabel.setText("Free Text");
         } else if (questionGroup != null) {
             questionType = QuestionType.GROUP;
             infoLabel.setText("Group");
-            dockPanel.add(isRightAnswer, DockPanel.CENTER);
+            dockPanel.add(isRightAnswer, DockPanel.EAST);
         }
 
         Button add = new Button("add");
@@ -125,7 +126,19 @@ public class AnswerList extends VerticalPanel {
         add.addClickHandler(event -> {
             switch (finalQuestionType) {
                 case STANDARD: {
-                    //todo realize creating standard answer
+                    AnswerStandard answer= new AnswerStandard();
+                    answer.setAnswerText(answerText.getText());
+
+                    QuestionStandard question = quiz.getQuestionStandard()
+                            .stream()
+                            .filter(x -> x.getId() == questionStandard.getId())
+                            .findFirst()
+                            .orElseThrow(RuntimeException::new);
+
+                    answer.setRightAnswer(isRightAnswer.getValue());
+                    question.getAnswerStandards().add(answer);
+                    updateQuiz(quiz);
+                    dialogBox.hide();
                 }
                 break;
 
@@ -139,10 +152,6 @@ public class AnswerList extends VerticalPanel {
                     answerFreeText.setAnswerText(answerText.getText());
 
                     QuestionFreeText question = quiz.getQuestionFreeTexts().stream().filter(x -> x.getId() == questionFreeText.getId()).findFirst().orElseThrow(RuntimeException::new);
-
-                    if (answerFreeText == null) {
-                        question.setAnswerFreeText(new HashSet<>());
-                    }
 
                     question.getAnswerFreeText().add(answerFreeText);
                     updateQuiz(quiz);

@@ -1,6 +1,8 @@
 package ru.filin.testSystem.domain;
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -17,6 +19,7 @@ public class QuestionStandard {
     private String text;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Quiz quiz;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true,
@@ -26,8 +29,6 @@ public class QuestionStandard {
 
     public QuestionStandard() {
     }
-
-
 
     public long getId() {
         return id;

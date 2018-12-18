@@ -1,5 +1,7 @@
 package ru.filin.testSystem.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 
 @Entity
@@ -13,6 +15,7 @@ public class QuestionGroup {
     private String text;
 
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @JsonIgnore
     private Quiz quiz;
 
     public long getId() {

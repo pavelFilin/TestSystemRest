@@ -33,8 +33,15 @@ public class QuizRestController {
 
     @RequestMapping(method = RequestMethod.PUT, produces = "application/json")
     public void putQuiz(@RequestBody Quiz quiz) {
-        quiz.getQuestionFreeTexts().forEach(q->q.setQuiz(quiz));
-        quiz.getQuestionFreeTexts().forEach(x->x.getAnswerFreeText().forEach(q->q.setQuestionFreeText(x)));
+        quiz.getQuestionFreeTexts().forEach(q -> q.setQuiz(quiz));
+        quiz.getQuestionGroups().forEach(q -> q.setQuiz(quiz));
+        quiz.getQuestionStandard().forEach(q -> q.setQuiz(quiz));
+
+        quiz.getQuestionFreeTexts().forEach(x -> x.getAnswerFreeText().forEach(q -> q.setQuestionFreeText(x)));
+        quiz.getQuestionStandard().forEach(x -> x.getAnswerStandards().forEach(q -> q.setQuestionStandard(x)));
+
+        //todo saving groups answers
+//        quiz.getQuestionGroups().forEach(x -> x.get().forEach(q -> q.setQuestionFreeText(x)));
         quizService.save(quiz);
     }
 
