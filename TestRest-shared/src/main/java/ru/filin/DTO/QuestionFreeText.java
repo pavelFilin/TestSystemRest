@@ -1,9 +1,11 @@
 package ru.filin.DTO;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class QuestionFreeText {
+public class QuestionFreeText implements Question {
 
     private long id;
 
@@ -23,6 +25,11 @@ public class QuestionFreeText {
 
     public String getText() {
         return text;
+    }
+
+    @Override
+    public List<Answer> getAnswers() {
+        return answerFreeText.stream().collect(Collectors.toList());
     }
 
     public void setText(String text) {

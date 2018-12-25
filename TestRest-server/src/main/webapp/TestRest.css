@@ -41,3 +41,7 @@ h1 {
 .gwt-Label {
   margin: 5px;
 }
+.inline {
+  display: inline;
+}
+

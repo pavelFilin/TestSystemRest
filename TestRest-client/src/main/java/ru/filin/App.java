@@ -10,6 +10,7 @@ import ru.filin.DTO.QuestionType;
 import ru.filin.DTO.Quiz;
 import ru.filin.bll.QuizServiceImpl;
 import ru.filin.bll.widgets.AdminQuizPanel;
+import ru.filin.bll.widgets.FlowQuizPanel;
 
 import java.util.HashSet;
 import java.util.Iterator;
@@ -36,6 +37,11 @@ public class App implements EntryPoint {
     @Override
     public void onModuleLoad() {
         RootPanel rootPanel = RootPanel.get("admin-quizzes-container");
+        RootPanel quizList = RootPanel.get("quizzes-list");
+
+        FlowQuizPanel flowQuizPanel = new FlowQuizPanel();
+        quizList.add(flowQuizPanel);
+        flowQuizPanel.refresh();
 
         rootPanel.add(adminQuizPanel);
 

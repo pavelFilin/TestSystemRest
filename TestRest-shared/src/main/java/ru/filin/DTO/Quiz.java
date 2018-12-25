@@ -2,8 +2,11 @@ package ru.filin.DTO;
 
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Quiz {
 
@@ -62,5 +65,14 @@ public class Quiz {
 
     public int getCountOfQuestion() {
         return questionFreeTexts.size() + questionGroups.size() + questionStandard.size();
+    }
+
+    public List<Question> getAllQuestions() {
+        List<Question> questions = new ArrayList<>();
+        questions.addAll(questionFreeTexts.stream().collect(Collectors.toList()));
+        questions.addAll(questionStandard.stream().collect(Collectors.toList()));
+        //todo finish question group
+//        questions.addAll(questionGroups.stream().collect(Collectors.toList()));
+        return questions;
     }
 }

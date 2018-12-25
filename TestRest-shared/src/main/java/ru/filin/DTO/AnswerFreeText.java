@@ -1,7 +1,7 @@
 package ru.filin.DTO;
 
 
-public class AnswerFreeText {
+public class AnswerFreeText implements Answer{
     private long id;
 
     private String answerText;
@@ -30,5 +30,10 @@ public class AnswerFreeText {
 
     public void setQuestionFreeText(QuestionFreeText questionFreeText) {
         this.questionFreeText = questionFreeText;
+    }
+
+    @Override
+    public String getText() {
+        return answerText;
     }
 }

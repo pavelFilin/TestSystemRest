@@ -2,9 +2,11 @@ package ru.filin.DTO;
 
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
-public class QuestionStandard {
+public class QuestionStandard implements Question {
 
     private long id;
 
@@ -28,6 +30,11 @@ public class QuestionStandard {
 
     public String getText() {
         return text;
+    }
+
+    @Override
+    public List<Answer> getAnswers() {
+        return answerStandards.stream().collect(Collectors.toList());
     }
 
     public void setText(String text) {

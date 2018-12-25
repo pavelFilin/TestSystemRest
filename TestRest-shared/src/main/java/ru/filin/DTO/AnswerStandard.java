@@ -1,7 +1,7 @@
 package ru.filin.DTO;
 
 
-public class AnswerStandard {
+public class AnswerStandard implements Answer {
     private long id;
 
     private String answerText;
@@ -40,5 +40,10 @@ public class AnswerStandard {
 
     public void setQuestionStandard(QuestionStandard questionStandard) {
         this.questionStandard = questionStandard;
+    }
+
+    @Override
+    public String getText() {
+        return answerText;
     }
 }
