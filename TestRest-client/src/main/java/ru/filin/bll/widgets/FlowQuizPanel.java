@@ -53,21 +53,13 @@ public class FlowQuizPanel extends FlowPanel {
 
             private void openTestingDialog(Quiz quiz) {
                 dialogBox.clear();
-//                dialogBox.setWidth("200px");
-//                dialogBox.setHeight("200px");
-//                dialogBox.setSize(Window.getClientWidth()+"px", Window.getClientHeight()+"px");
-
-
-                Set<QuestionStandard> questionStandard = quiz.getQuestionStandard();
-                Set<QuestionFreeText> questionFreeTexts = quiz.getQuestionFreeTexts();
-                Set<QuestionGroup> questionGroups = quiz.getQuestionGroups();
-
                 QuizWheel quizWheel = new QuizWheel(quiz);
 
                 DockPanel dockPanel = new DockPanel();
 
                 Label titleLabel = new Label(quiz.getTitle());
                 dockPanel.add(titleLabel, DockPanel.NORTH);
+
                 Label numberOfQuestion = new Label("№ 1 " + "of " + quizWheel.getCountOfQuestions());
                 dockPanel.add(numberOfQuestion, DockPanel.NORTH);
 
@@ -76,7 +68,7 @@ public class FlowQuizPanel extends FlowPanel {
                 Label labelText = new Label(question.getText());
                 dockPanel.add(labelText, DockPanel.CENTER);
 
-                TextBox answer = new TextBox();
+                TextBox answerTextBox = new TextBox();
 
                 Button doAnswerButton = new Button("pass");
 
@@ -86,15 +78,15 @@ public class FlowQuizPanel extends FlowPanel {
 
                         numberOfQuestion.setText("№ " + Integer.toString(quizWheel.getNumberOfCurrentQuestions()+1) + "of " + quizWheel.getCountOfQuestions());
                         labelText.setText(question1.getText());
-                        answer.setText("");
+                        answerTextBox.setText("");
                     } else {
                         Window.alert("finish");
                         dialogBox.hide();
                     }
                 });
 
-                dockPanel.add(answer, DockPanel.NORTH);
                 dockPanel.add(doAnswerButton, DockPanel.SOUTH);
+                dockPanel.add(answerTextBox, DockPanel.SOUTH);
 
                 dialogBox.add(dockPanel);
                 dialogBox.show();

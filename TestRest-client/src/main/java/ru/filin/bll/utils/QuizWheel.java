@@ -25,7 +25,7 @@ public class QuizWheel {
     public Question getNext() {
         if (numberOfCurrentQuestions < countOfQuestions) {
             numberOfCurrentQuestions++;
-
+            Window.alert(Integer.toString(questions.size()));
             return questions.get(numberOfCurrentQuestions);
         }
 

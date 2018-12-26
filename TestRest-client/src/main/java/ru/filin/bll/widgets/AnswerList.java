@@ -44,11 +44,11 @@ public class AnswerList extends VerticalPanel {
 
                 int count = 0;
                 if (questionStandard != null) {
-                    questionStandard = response.getQuestionStandard().stream().filter(x->x.getId()==questionStandard.getId()).findFirst().get();
+                    questionStandard = response.getQuestionStandard().stream().filter(x -> x.getId() == questionStandard.getId()).findFirst().get();
                     Label textLabel = new Label(th.questionStandard.getText());
                     th.add(textLabel);
                     for (AnswerStandard answerStandard : questionStandard.getAnswerStandards()) {
-                        questionStandard = response.getQuestionStandard().stream().filter(x->x.getId()==questionStandard.getId()).findFirst().get();
+                        questionStandard = response.getQuestionStandard().stream().filter(x -> x.getId() == questionStandard.getId()).findFirst().get();
 
                         HorizontalPanel answerPanel = new HorizontalPanel();
                         answerPanel.add(new Label(++count + ". " + answerStandard.getAnswerText()));
@@ -61,7 +61,7 @@ public class AnswerList extends VerticalPanel {
                         th.add(answerPanel);
                     }
                 } else if (questionFreeText != null) {
-                    questionFreeText = response.getQuestionFreeTexts().stream().filter(x->x.getId()==questionFreeText.getId()).findFirst().get();
+                    questionFreeText = response.getQuestionFreeTexts().stream().filter(x -> x.getId() == questionFreeText.getId()).findFirst().get();
 
 
                     Label textLabel = new Label("answers of " + th.questionFreeText.getText());
@@ -73,7 +73,7 @@ public class AnswerList extends VerticalPanel {
                     }
 
                 } else if (questionGroup != null) {
-                    questionGroup = response.getQuestionGroups().stream().filter(x->x.getId()==questionGroup.getId()).findFirst().get();
+                    questionGroup = response.getQuestionGroups().stream().filter(x -> x.getId() == questionGroup.getId()).findFirst().get();
 
                     Label textLabel = new Label(th.questionGroup.getText());
                     th.add(textLabel);
@@ -103,21 +103,21 @@ public class AnswerList extends VerticalPanel {
         TextBox answerText = new TextBox();
         dockPanel.add(answerText, DockPanel.CENTER);
 
-        CheckBox isRightAnswer = new CheckBox("right answer", true);
+        CheckBox isRightAnswerCheckBox = new CheckBox("right answer", true);
 
         QuestionType questionType = QuestionType.FREE_TEXT;
 
         if (questionStandard != null) {
             questionType = QuestionType.STANDARD;
             infoLabel.setText("Standard");
-            dockPanel.add(isRightAnswer, DockPanel.EAST);
+            dockPanel.add(isRightAnswerCheckBox, DockPanel.EAST);
         } else if (questionFreeText != null) {
             questionType = QuestionType.FREE_TEXT;
             infoLabel.setText("Free Text");
         } else if (questionGroup != null) {
             questionType = QuestionType.GROUP;
             infoLabel.setText("Group");
-            dockPanel.add(isRightAnswer, DockPanel.EAST);
+            dockPanel.add(isRightAnswerCheckBox, DockPanel.EAST);
         }
 
         Button add = new Button("add");
@@ -126,7 +126,7 @@ public class AnswerList extends VerticalPanel {
         add.addClickHandler(event -> {
             switch (finalQuestionType) {
                 case STANDARD: {
-                    AnswerStandard answer= new AnswerStandard();
+                    AnswerStandard answer = new AnswerStandard();
                     answer.setAnswerText(answerText.getText());
 
                     QuestionStandard question = quiz.getQuestionStandard()
@@ -135,7 +135,7 @@ public class AnswerList extends VerticalPanel {
                             .findFirst()
                             .orElseThrow(RuntimeException::new);
 
-                    answer.setRightAnswer(isRightAnswer.getValue());
+                    answer.setRightAnswer(isRightAnswerCheckBox.getValue());
                     question.getAnswerStandards().add(answer);
                     updateQuiz(quiz);
                     dialogBox.hide();

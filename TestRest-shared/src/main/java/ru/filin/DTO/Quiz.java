@@ -1,7 +1,8 @@
 package ru.filin.DTO;
 
 
-import java.io.Serializable;
+import com.google.gwt.user.client.Window;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -71,6 +72,7 @@ public class Quiz {
         List<Question> questions = new ArrayList<>();
         questions.addAll(questionFreeTexts.stream().collect(Collectors.toList()));
         questions.addAll(questionStandard.stream().collect(Collectors.toList()));
+
         //todo finish question group
 //        questions.addAll(questionGroups.stream().collect(Collectors.toList()));
         return questions;
