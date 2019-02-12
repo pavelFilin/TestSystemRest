@@ -1,24 +1,30 @@
 package ru.filin.testSystem.restControllers;
 
-import com.google.gson.Gson;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import ru.filin.testSystem.Services.QuizService;
 import ru.filin.testSystem.domain.Quiz;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/quiz")
 public class QuizRestController {
+    //    final static Logger logger = Logger.getLogger(QuizRestController.class);
     @Autowired
     QuizService quizService;
 
     @GetMapping
-    public List<ru.filin.testSystem.domain.Quiz> getQuiz() {
+    public List<ru.filin.testSystem.domain.Quiz> getQuiz() throws InterruptedException {
+        Thread.sleep(1000);
+//        logger.warn("This is warn : " );
+//        logger.error("This is error : "  );
+//        logger.fatal("This is fatal : " );
+//        logger.debug("sdsd");
 
-        return quizService.findAll();
+        List<Quiz> all = quizService.findAll();
+        return all;
     }
 
     @GetMapping("{id}")

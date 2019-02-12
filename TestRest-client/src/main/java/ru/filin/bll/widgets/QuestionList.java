@@ -2,6 +2,7 @@ package ru.filin.bll.widgets;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
@@ -11,7 +12,7 @@ import ru.filin.QuizService;
 import java.util.Set;
 
 public class QuestionList extends VerticalPanel {
-    private Widget parent;
+    private AdminQuizPanel parent;
     QuizService quizService = GWT.create(QuizService.class);
     DialogBox addNewQuestionDialog = new DialogBox(true);
 
@@ -21,7 +22,7 @@ public class QuestionList extends VerticalPanel {
         initialize();
     }
 
-    public QuestionList(Widget parent) {
+    public QuestionList(AdminQuizPanel parent) {
         this.parent = parent;
         initialize();
     }
@@ -132,10 +133,16 @@ public class QuestionList extends VerticalPanel {
 
 
         addButton.addClickHandler(event -> {
-            switch(QuestionType.valueOf(typeQuestionListBox.getSelectedItemText())) {
-                case FREE_TEXT: addNewQuestionFreeText(text.getText()); break;
-                case STANDARD: addNewQuestionStandard(text.getText()); break;
-                case GROUP: addNewQuestionGroup(text.getText()); break;
+            switch (QuestionType.valueOf(typeQuestionListBox.getSelectedItemText())) {
+                case FREE_TEXT:
+                    addNewQuestionFreeText(text.getText());
+                    break;
+                case STANDARD:
+                    addNewQuestionStandard(text.getText());
+                    break;
+                case GROUP:
+                    addNewQuestionGroup(text.getText());
+                    break;
             }
 
         });
@@ -176,7 +183,8 @@ public class QuestionList extends VerticalPanel {
             @Override
             public void onSuccess(Method method, Void response) {
                 refresh();
-                addNewQuestionDialog.hide();
+                parent.getQuizList().refresh();
+                        addNewQuestionDialog.hide();
             }
         });
     }

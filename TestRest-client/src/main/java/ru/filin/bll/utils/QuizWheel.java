@@ -1,9 +1,7 @@
 package ru.filin.bll.utils;
 
-import com.google.gwt.user.client.Window;
 import ru.filin.DTO.Question;
 import ru.filin.DTO.Quiz;
-
 
 import java.util.List;
 
@@ -25,7 +23,6 @@ public class QuizWheel {
     public Question getNext() {
         if (numberOfCurrentQuestions < countOfQuestions) {
             numberOfCurrentQuestions++;
-            Window.alert(Integer.toString(questions.size()));
             return questions.get(numberOfCurrentQuestions);
         }
 

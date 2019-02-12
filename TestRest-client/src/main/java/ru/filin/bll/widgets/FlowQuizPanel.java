@@ -1,5 +1,6 @@
 package ru.filin.bll.widgets;
 
+import com.google.gwt.core.client.Duration;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
@@ -7,12 +8,17 @@ import org.fusesource.restygwt.client.Method;
 import org.fusesource.restygwt.client.MethodCallback;
 import ru.filin.DTO.*;
 import ru.filin.QuizService;
+import ru.filin.bll.utils.MyProfiler;
 import ru.filin.bll.utils.QuizWheel;
 
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class FlowQuizPanel extends FlowPanel {
+    static final Logger logger = Logger.getLogger(FlowQuizPanel.class.getSimpleName());
+
     private QuizService quizService = GWT.create(QuizService.class);
 
     private DialogBox dialogBox = new DialogBox(false, true);
@@ -21,6 +27,9 @@ public class FlowQuizPanel extends FlowPanel {
 
 
     public void refresh() {
+
+        MyProfiler profiler = new MyProfiler();
+        profiler.start();
         this.clear();
 
         quizService.findAll(new MethodCallback<List<Quiz>>() {
@@ -38,13 +47,13 @@ public class FlowQuizPanel extends FlowPanel {
 
                     verticalPanel.add(titleLabel);
                     verticalPanel.add(countOfQuestionLabel);
-                    Button button = new Button("pass");
+                    Button passButton = new Button("pass");
 
-                    button.addClickHandler(e -> openTestingDialog(q));
+                    passButton.addClickHandler(e -> openTestingDialog(q));
 
-                    button.setStyleName("btn btn-primary");
+                    passButton.setStyleName("btn btn-primary");
                     verticalPanel.setStyleName("inline");
-                    verticalPanel.add(button);
+                    verticalPanel.add(passButton);
                     verticalPanel.setSpacing(10);
 
                     th.add(verticalPanel);
@@ -76,11 +85,10 @@ public class FlowQuizPanel extends FlowPanel {
                     if (quizWheel.hasNext()) {
                         Question question1 = quizWheel.getNext();
 
-                        numberOfQuestion.setText("№ " + Integer.toString(quizWheel.getNumberOfCurrentQuestions()+1) + "of " + quizWheel.getCountOfQuestions());
+                        numberOfQuestion.setText("№ " + Integer.toString(quizWheel.getNumberOfCurrentQuestions() + 1) + " of " + quizWheel.getCountOfQuestions());
                         labelText.setText(question1.getText());
                         answerTextBox.setText("");
                     } else {
-                        Window.alert("finish");
                         dialogBox.hide();
                     }
                 });
@@ -92,6 +100,8 @@ public class FlowQuizPanel extends FlowPanel {
                 dialogBox.show();
             }
         });
+        double endTime = profiler.end();
+        logger.log(Level.INFO, this.getClass().getSimpleName() + " was loaded for " + endTime + "ms ");
 
     }
 }

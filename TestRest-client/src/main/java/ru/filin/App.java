@@ -2,25 +2,22 @@ package ru.filin;
 
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import ru.filin.DTO.QuestionFreeText;
-import ru.filin.DTO.QuestionStandard;
-import ru.filin.DTO.QuestionType;
 import ru.filin.DTO.Quiz;
 import ru.filin.bll.QuizServiceImpl;
+import ru.filin.bll.utils.MyProfiler;
 import ru.filin.bll.widgets.AdminQuizPanel;
 import ru.filin.bll.widgets.FlowQuizPanel;
 
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Entry point classes define <code>onModuleLoad()</code>.
  */
 public class App implements EntryPoint {
+
+    Logger logger = Logger.getLogger(this.getClass().getSimpleName());
 
     private final QuizServiceImpl quizService = new QuizServiceImpl(GWT.create(QuizService.class), this);
 
@@ -36,14 +33,20 @@ public class App implements EntryPoint {
 
     @Override
     public void onModuleLoad() {
+        MyProfiler profiler = new MyProfiler();
+        profiler.start();
+
         RootPanel rootPanel = RootPanel.get("admin-quizzes-container");
         RootPanel quizList = RootPanel.get("quizzes-list");
 
-        FlowQuizPanel flowQuizPanel = new FlowQuizPanel();
-        quizList.add(flowQuizPanel);
-        flowQuizPanel.refresh();
+        FlowQuizPanel flowQuizUserPanel = new FlowQuizPanel();
+        quizList.add(flowQuizUserPanel);
+
+
+        flowQuizUserPanel.refresh();
 
         rootPanel.add(adminQuizPanel);
+
 
         quizService.findAll();
 
@@ -60,6 +63,9 @@ public class App implements EntryPoint {
 
         rootPanel.add(addQuizButton);
         rootPanel.add(quizTitleTextBox);
+
+        double endTime = profiler.end();
+        logger.log(Level.INFO, "onModuleLoad was executed for " + endTime +"ms" );
     }
 
     public void refreshAdminPanel() {
