@@ -1,5 +1,6 @@
 package ru.filin.bll.widgets;
 
+import com.google.gwt.core.client.Duration;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.HasClickHandlers;
 import com.google.gwt.user.client.ui.Grid;
@@ -12,6 +13,7 @@ import ru.filin.DTO.Quiz;
 import ru.filin.QuizService;
 import ru.filin.bll.QuizServiceImpl;
 import ru.filin.bll.utils.MyProfiler;
+import ru.filin.bll.utils.StatsEventLogger;
 
 import java.util.List;
 import java.util.logging.Level;
@@ -61,6 +63,9 @@ public class QuizList extends HorizontalPanel {
     }
 
     public void refresh() {
+        double startTime = Duration.currentTimeMillis();
+        StatsEventLogger.logEvent(GWT.getModuleName(), "QuizList", "loadListings", startTime, "begin");
+
         MyProfiler profiler = new MyProfiler();
         profiler.start();
 
@@ -78,7 +83,7 @@ public class QuizList extends HorizontalPanel {
             @Override
             public void onSuccess(Method method, List<Quiz> quizzes) {
 
-                
+
                 Grid grid = new Grid(quizzes.size() + 1, 2);
 
                 th.add(grid);
@@ -95,7 +100,8 @@ public class QuizList extends HorizontalPanel {
                 double endTime = profiler.end();
                 logger.log(Level.INFO, th.getClass().getSimpleName() + " have received for " + endTime + "ms");
 
-
+                double endTime2 = Duration.currentTimeMillis();
+                StatsEventLogger.logEvent(GWT.getModuleName(), "QuizList", "loadListings", endTime2, "end");
             }
         });
         double endTime = profiler.end();
